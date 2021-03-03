@@ -162,30 +162,31 @@ const DataView = ({
       method: 'POST',
       headers: {'Content-type': 'application/json'},
       // body:{field}
-    }).then(res=>{ //res.json();
-      if(!query ){
-        setIsShow(show)
-        throw new Error('search input required');
+    }).then( res=>{ //res.json();
+      if(!res.data){
         
+        throw new Error(`cannot search in ${model}`);
         
       }
-      
+      else{
+        console.log( JSON.stringify(res.data) )
+        setSearchContent(res.data);
+         setIsShow(!show)
+         return;
 
-      console.log( JSON.stringify(res.data) )
-    setSearchContent(res.data);
-    setIsShow(!show)
-    setError("")
-    return;
+      }
+
+     
+    //return;
     
 
    // console.log(searchContent);
     })
-    .catch( async(e)=>{  
-    await setError(e.toString());
-    alert(e)
-    
-    
-  })
+    .catch(async(e)=>{
+     
+      alert(e)
+
+    })
     .finally(()=>{
       setIsSearching(false);
       
@@ -230,7 +231,7 @@ const DataView = ({
                 <div className="form-group col-mb-5">
 
                 
-            <input type="text" value={query} name="search" onChange={(e)=>onChangeSearchQuery(e) }  className="form-control"  placeholder="search...." style={{height:"35px"},{fontSize:"16px"}} ></input>
+            <input type="text" name="search" onChange={(e)=>onChangeSearchQuery(e) }  className="form-control"  placeholder="search...." style={{height:"35px"},{fontSize:"16px"}} ></input>
             {/* {error && <h5 className="text-center" style={{color:"red"}}>{error}</h5>} */}
             </div>
 
@@ -384,7 +385,7 @@ const DataView = ({
 
        <div>
         
-      { isShow && activeModel.index && searchContent !== 'Not Matching Result' && query ?  (
+      { isShow && activeModel.index && searchContent !== 'Not Matching Result' &&  searchContent  ?  (
         <>
         <hr>
       </hr>
@@ -453,6 +454,7 @@ const DataView = ({
             
           ): null
         }
+
 
 
 </div>
