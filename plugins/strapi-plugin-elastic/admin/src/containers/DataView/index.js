@@ -7,6 +7,7 @@ import { Table, Button ,Select ,Input } from '@buffetjs/core';
 import pluginPkg from '../../../../package.json';
 
 import { LoadingBar } from '@buffetjs/styles';
+import {Modal} from 'react-bootstrap'
 
 
 import axios from 'axios';
@@ -95,7 +96,12 @@ const DataView = ({
   //const [isShow,setIsShow]=useState(false);
   const [showP , setShowP]=useState(true);
   const [error ,setError]=useState('');
+const [modal ,setModal]=useState(false);
 
+
+
+const handleClose = () => setModal(false);
+  const handleShow = () => setModal(true);
 
   const formSubmit=(e)=>{
     e.preventDefault();
@@ -165,7 +171,7 @@ const DataView = ({
     }).then( res=>{ //res.json();
       if(!res.data){
         
-        throw new Error(`cannot search in ${model}`);
+        setModal(true)
         
       }
       else{
@@ -184,7 +190,7 @@ const DataView = ({
     })
     .catch(async(e)=>{
      
-      alert(e)
+     // alert(e)
 
     })
     .finally(()=>{
@@ -293,6 +299,31 @@ const DataView = ({
         
           <Select style={{width:"150px"}} value={field} className="col-2" placeholder='select field to search' options={dataHead} onChange={(e)=>onChangeSearchField(e) } 
           />  */}
+
+           
+          <Modal show={modal} onHide={handleClose}   size="sm"    aria-labelledby="example-modal-sizes-title-sm">
+        <Modal.Header closeButton>
+          <Modal.Title><h3 style={{color:"red"}}>Error</h3></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{`Can't search in ${activeModel.model} is empty`}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          
+        </Modal.Footer>
+      </Modal>
+      
+
+
+
+
+
+
+
+
+
+
            
         <Button
           color="success"
